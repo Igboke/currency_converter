@@ -1,7 +1,6 @@
 import requests
 import json
 from decimal import Decimal
-import datetime
 
 
 class FetchRateError(Exception):
