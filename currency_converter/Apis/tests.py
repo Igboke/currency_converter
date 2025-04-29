@@ -52,4 +52,7 @@ class CurrencyConversionTestCase(APITestCase):
         self.assertEqual(response.status_code,status.HTTP_400_BAD_REQUEST)
 
     def test_missing_date(self):
-        pass
+        response = self.client.post(self.url,data=self.missing_date,format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("calculated_amount", response.data)
+        self.assertIn("exchange_rate", response.data)
