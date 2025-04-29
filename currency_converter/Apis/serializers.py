@@ -1,6 +1,13 @@
 from rest_framework import serializers
 import datetime
 
+class CurrencyItemSerializer(serializers.Serializer):
+    """
+    Serializer to represent a single currency item in the output list.
+    """
+    code = serializers.CharField(read_only=True)
+    name = serializers.CharField(read_only=True) 
+
 class CurrencyConversionSerializer(serializers.Serializer):
     """
     Serializer for Currency Conversion
