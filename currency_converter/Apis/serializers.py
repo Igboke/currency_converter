@@ -1,9 +1,14 @@
 from rest_framework import serializers
 
-class CurrencySerializer(serializers.Serializer):
+class CurrencyConversionSerializer(serializers.Serializer):
     """
-    Serializer for Currency Data
+    Serializer for Currency Conversion
     """
-    currency = serializers.CharField(max_length=3,required=True)
-    amount = serializers.DecimalField(max_digits=15,decimal_places=2,required=True)
-    
+    base_currency = serializers.CharField(max_length=10,required=True)
+    converted_currency = serializers.CharField(max_length=10,required=True)
+    amount = serializers.DecimalField(max_digits=10, decimal_places=2,required=True)
+
+    def validate(self, data):
+        if data.get('base_currency') == data.get('converted_currency'):
+            raise serializers.ValidationError("Base and converted currencies cannot be the same.")
+        return data
