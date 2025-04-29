@@ -1,12 +1,63 @@
 from rest_framework.views import APIView 
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import CurrencyConversionSerializer, CurrencyConversionOutputSerializer
+from .serializers import CurrencyConversionSerializer, CurrencyConversionOutputSerializer, CurrencyItemSerializer
 from drf_spectacular.utils import extend_schema
 from .utils import fetch_exchange_rate, FetchRateError, RateNotFoundError, RateCalculationError
+import datetime
+import requests
+import json
 
     
+class CurrencyListView(APIView):
+    """
+    API View to fetch the list of available currencies.
+    """
+    @extend_schema(
+        responses={200: CurrencyItemSerializer(many=True)},
+        summary="Fetch the list of available currencies.",
+        description="Returns a list of all available currencies with their codes and names."
+    )
+    def get(self, request, *args, **kwargs):
+        # Fetch the list of currencies
+        apiVersion = "v1"
+        date = datetime.datetime.now().strftime("%Y-%m-%d")
+        endpoint_url = f"https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@{date}/{apiVersion}/currencies.json"
+        try:
+            response = requests.get(endpoint_url)
+            response.raise_for_status() 
+            external_data = response.json()
+            
+            currency_list = []
+
+            if isinstance(external_data,dict):
+                for key,value in external_data.items():
+                    currency_list.append({
+                        "code": key,
+                        "name": value
+                    })
+            else:
+                Response({"error": "Invalid data format from external API"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+            currency_serializer = CurrencyItemSerializer(currency_list, many=True)
+            return Response(currency_serializer.data, status=status.HTTP_200_OK)
+        except requests.exceptions.RequestException as e:
+            return Response(
+                {"error": "Failed to fetch currency list from external source"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+        except json.JSONDecodeError as e:
+            return Response(
+                {"error": "Failed to decode JSON response from external source"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 class ConvertCurrencyView(APIView):
+    """
+    API View to convert an amount between two currencies (crypto or fiat).
+    """
     @extend_schema(
         request=CurrencyConversionSerializer,
         responses={200: CurrencyConversionOutputSerializer},
