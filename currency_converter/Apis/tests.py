@@ -6,7 +6,7 @@ import datetime
 
 class CurrencyConversionTestCase(APITestCase):
     def setUp(self):
-        self.url = reverse('convert_currency')  # Adjust the URL name as needed
+        self.url = reverse('convert_currency')
         self.valid_data = {
             "base_currency": "usd",
             "converted_currency": "eur",
@@ -35,4 +35,8 @@ class CurrencyConversionTestCase(APITestCase):
             "amount": 100,
             "date": datetime.datetime.now().strftime("%Y-%m-%d")
         }
-    
+    def test_valid_conversion(self):
+        response = self.client.post(self.url, data=self.valid_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn('converted_amount', response.data)
+        self.assertIn('exchange_rate', response.data)
