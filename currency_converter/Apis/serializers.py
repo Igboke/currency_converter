@@ -10,7 +10,7 @@ class CurrencyConversionSerializer(serializers.Serializer):
     date = serializers.DateField(required=False, help_text="Date in YYYY-MM-DD format. Defaults to latest if not provided.")
 
     def validate(self, data):
-        if data.get('base_currency') == data.get('converted_currency'):
+        if data.get("base_currency") == data.get("converted_currency"):
             raise serializers.ValidationError("Base and converted currencies cannot be the same.")
         return data
     

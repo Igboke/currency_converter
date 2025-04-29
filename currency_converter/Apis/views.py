@@ -6,6 +6,7 @@ from drf_spectacular.utils import extend_schema
 import requests 
 import json
 from decimal import Decimal
+import datetime
 
 
 class ConvertCurrencyView(APIView):
@@ -28,6 +29,10 @@ class ConvertCurrencyView(APIView):
         converted_currency = validated_data["converted_currency"]
         amount = validated_data["amount"]
         date = validated_data["date"]
+
+        #if date not provided
+        if date is None:
+            date = datetime.datetime.now().strftime("%Y-%m-%d")
 
 
         #utilizing endpoint
@@ -78,20 +83,17 @@ class ConvertCurrencyView(APIView):
             return Response(output_serializer.data, status=status.HTTP_200_OK)
 
         except requests.exceptions.RequestException as e:
-            print(f"Error calling external API: {e}")
             # Handle errors calling the external API
             return Response(
                 {"error": "Failed to fetch exchange rate from external API"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
         except json.JSONDecodeError as e:
-             print(f"JSON Decode Error from external API: {e}")
              return Response(
                 {"error": "Invalid response format from external API"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
         except Exception as e:
-            print(f"An unexpected error occurred: {e}")
             # Catch any other unexpected errors
             return Response(
                 {"error": "An unexpected error occurred"},
