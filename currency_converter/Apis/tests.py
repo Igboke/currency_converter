@@ -38,5 +38,11 @@ class CurrencyConversionTestCase(APITestCase):
     def test_valid_conversion(self):
         response = self.client.post(self.url, data=self.valid_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn('calculated_amount', response.data)
-        self.assertIn('exchange_rate', response.data)
+        self.assertIn("calculated_amount", response.data)
+        self.assertIn("exchange_rate", response.data)
+
+    def test_invalid_data(self):
+        response = self.client.post(self.url, data=self.invalid_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["base_currency"], [
+    "Ensure this field has no more than 4 characters."])

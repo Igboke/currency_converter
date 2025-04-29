@@ -5,8 +5,8 @@ class CurrencyConversionSerializer(serializers.Serializer):
     """
     Serializer for Currency Conversion
     """
-    base_currency = serializers.CharField(max_length=10,required=True)
-    converted_currency = serializers.CharField(max_length=10,required=True)
+    base_currency = serializers.CharField(max_length=4,required=True)
+    converted_currency = serializers.CharField(max_length=4,required=True)
     amount = serializers.DecimalField(max_digits=10, decimal_places=2,required=True)
     date = serializers.DateField(required=False, help_text="Date in YYYY-MM-DD format.",allow_null=True)
 
