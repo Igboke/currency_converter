@@ -56,3 +56,8 @@ class CurrencyConversionTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn("calculated_amount", response.data)
         self.assertIn("exchange_rate", response.data)
+    
+    def test_missing_base_currency(self):
+        response = self.client.post(self.url,data=self.missing_base_currency,format="json")
+        self.assertEqual(response.status_code,status.HTTP_400_BAD_REQUEST)
+        self.assertIn("base_currency",response.data)
