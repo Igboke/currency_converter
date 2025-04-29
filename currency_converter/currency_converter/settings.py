@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     "Clients.apps.ClientsConfig",
     "Apis.apps.ApisConfig",
     "rest_framework.authtoken",
-    "rest_framework"
+    "rest_framework",
+    "drf_spectacular",
 ]
 
 MIDDLEWARE = [
@@ -75,6 +76,17 @@ TEMPLATES = [
         },
     },
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Currency Converter API',
+    'DESCRIPTION': 'API for Currency Conversion',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
 
 WSGI_APPLICATION = 'currency_converter.wsgi.application'
 
