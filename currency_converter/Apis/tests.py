@@ -45,4 +45,4 @@ class CurrencyConversionTestCase(APITestCase):
         response = self.client.post(self.url, data=self.invalid_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["base_currency"], [
-    "Ensure this field has no more than 4 characters."])
+    "Ensure this field has no more than 6 characters."])
