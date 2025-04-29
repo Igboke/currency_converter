@@ -1,4 +1,5 @@
 from rest_framework import serializers
+import datetime
 
 class CurrencyConversionSerializer(serializers.Serializer):
     """
@@ -7,10 +8,14 @@ class CurrencyConversionSerializer(serializers.Serializer):
     base_currency = serializers.CharField(max_length=10,required=True)
     converted_currency = serializers.CharField(max_length=10,required=True)
     amount = serializers.DecimalField(max_digits=10, decimal_places=2,required=True)
-    date = serializers.DateField(required=False, help_text="Date in YYYY-MM-DD format. Defaults to latest if not provided.")
+    date = serializers.DateField(required=False, help_text="Date in YYYY-MM-DD format.",allow_null=True)
 
     def validate(self, data):
-        if data.get("base_currency") == data.get("converted_currency"):
+        validated_data = super().validate(data)
+        if "date" not in validated_data or validated_data["date"] is None:
+             # If date is missing or None, set it to today's date
+             validated_data["date"] = datetime.datetime.now().strftime("%Y-%m-%d")
+        if data["base_currency"] == data["converted_currency"]:
             raise serializers.ValidationError("Base and converted currencies cannot be the same.")
         return data
     
