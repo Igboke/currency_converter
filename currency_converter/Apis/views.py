@@ -3,10 +3,6 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import CurrencyConversionSerializer, CurrencyConversionOutputSerializer
 from drf_spectacular.utils import extend_schema
-import requests 
-import json
-from decimal import Decimal
-import datetime
 from .utils import fetch_exchange_rate, FetchRateError, RateNotFoundError, RateCalculationError
 
     
