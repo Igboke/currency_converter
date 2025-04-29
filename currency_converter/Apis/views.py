@@ -61,29 +61,6 @@ class ConvertCurrencyView(APIView):
                 )
 
         
-            # response = requests.get(endpoint_url)
-            # response.raise_for_status()
-            # data = response.json()
-            # rate_data = data.get(base_currency, {}) # Get the inner dictionary for the base currency or default to empyt bracket
-            # rate = rate_data.get(converted_currency) # Get the rate for the converted currency
-
-            # if rate is None:
-            #      # Handle case where the target currency is not found for the base
-            #      return Response(
-            #          {"error": f"Could not find exchange rate for {base_currency} to {converted_currency}"},
-            #          status=status.HTTP_404_NOT_FOUND
-            #      )
-
-            # # Perform the calculation
-            # try:
-            #      rate = Decimal(str(rate)) # Convert potentially float/string rate to Decimal
-            #      calculated_amount = amount * rate
-            # except Exception as e:
-            #      return Response(
-            #          {"error": "Error during calculation"},
-            #          status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            #      )
-
             # Prepare the output data
             output_data_dict = {
                 "base_currency": base_currency,
@@ -107,6 +84,11 @@ class ConvertCurrencyView(APIView):
                  {"error": "Internal error during final calculation"},
                  status=status.HTTP_500_INTERNAL_SERVER_ERROR
              )
+        except Exception as e:       
+            return Response(
+                {"error": "An unexpected internal server error occurred"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
         
         
