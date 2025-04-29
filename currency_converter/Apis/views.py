@@ -2,12 +2,19 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import CurrencyConversionSerializer, CurrencyConversionOutputSerializer
+from drf_spectacular.utils import extend_schema
 import requests 
 import json
 from decimal import Decimal
 
 
 class ConvertCurrencyView(APIView):
+    @extend_schema(
+        request=CurrencyConversionSerializer,
+        responses={200: CurrencyConversionOutputSerializer},
+        summary="Convert an amount between two currencies",
+        description="Fetches the latest exchange rate and calculates the converted amount."
+    )
     def post(self, request, *args, **kwargs):
         input_serializer = CurrencyConversionSerializer(data=request.data)
 
