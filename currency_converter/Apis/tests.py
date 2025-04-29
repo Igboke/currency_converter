@@ -7,6 +7,7 @@ import datetime
 class CurrencyConversionTestCase(APITestCase):
     def setUp(self):
         self.url = reverse("convert_currency")
+        self.currency_list_url = reverse("currency_list")
         self.valid_data = {
             "base_currency": "usd",
             "converted_currency": "eur",
@@ -61,3 +62,13 @@ class CurrencyConversionTestCase(APITestCase):
         response = self.client.post(self.url,data=self.missing_base_currency,format="json")
         self.assertEqual(response.status_code,status.HTTP_400_BAD_REQUEST)
         self.assertIn("base_currency",response.data)
+
+    def test_currency_list(self):
+        response = self.client.get(self.currency_list_url)
+        self.assertEqual(response.status_code,status.HTTP_200_OK)
+        self.assertIsInstance(response.data, list)
+        self.assertGreater(len(response.data), 0)
+        self.assertTrue(
+        any(item.get('code') == 'usd' for item in response.data),
+        "Response data does not contain an item with code 'usd'"
+    )
