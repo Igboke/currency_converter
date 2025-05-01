@@ -59,6 +59,6 @@ Content Types: `application/json`, `application/x-www-form-urlencoded`
 
 For questions or feedback, please contact:
 
-- **Email**: [Igboke Chibuike Daniel](danieligboke669@gmail.com)
+- **Email**: [Igboke Chibuike Daniel](mailto:danieligboke669@gmail.com)
 - **GitHub**: [Igboke Chibuike Daniel](https://github.com/Igboke)
 - **Project Website**: [Currency Converter](https://currency-converter-i7w7.onrender.com/api/schema/swagger-ui/)
