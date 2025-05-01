@@ -15,7 +15,7 @@ Implementation of [Fawaz Ahmed API](https://github.com/fawazahmed0/exchange-api)
 
 ### 🔄 `POST /api/v1/convert/`
 
-**Description:** Converts a specified amount from one currency to another using the latest exchange rate.
+**Description:** Converts a specified amount from one currency to another using the latest exchange rate. If no amount is given it defaults to one, implying you require the exchange rate only
 
 **Request Body:**
 Content Types: `application/json`, `application/x-www-form-urlencoded`
@@ -24,7 +24,7 @@ Content Types: `application/json`, `application/x-www-form-urlencoded`
 |-------------------|--------|-------------------------------------|----------|
 | base_currency      | string | Code of the currency to convert from | ✅       |
 | converted_currency | string | Code of the currency to convert to   | ✅       |
-| amount             | string | Amount to be converted               | ✅       |
+| amount             | string | Amount to be converted               | ❌       |
 | date               | string | Optional date (YYYY-MM-DD)           | ❌       |
 
 **Response Example:**
@@ -39,6 +39,7 @@ Content Types: `application/json`, `application/x-www-form-urlencoded`
   "date": "2025-05-01"
 }
 ```
+
 ---
 
 ### 📄 GET /api/v1/currencies/
