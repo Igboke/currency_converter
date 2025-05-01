@@ -107,22 +107,6 @@ class ConvertCurrencyView(APIView):
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
 
-        
-            # Prepare the output data
-            output_data_dict = {
-                "base_currency": base_currency,
-                "converted_currency": converted_currency,
-                "original_amount": amount,
-                "exchange_rate": rate,
-                "calculated_amount": calculated_amount,
-                "date":date
-            }
-
-            # Instantiate the output
-            output_serializer = CurrencyConversionOutputSerializer(output_data_dict)
-
-            # Return the serialized data in the response
-            return Response(output_serializer.data, status=status.HTTP_200_OK)
 
         try:
             calculated_amount = amount * rate
