@@ -36,6 +36,17 @@ class CurrencyConversionTestCase(APITestCase):
             "amount": 100,
             "date": datetime.datetime.now().strftime("%Y-%m-%d")
         }
+        self.missing_amount = {
+            "base_currency": "usd",
+            "converted_currency": "eur",
+            "date": datetime.datetime.now().strftime("%Y-%m-%d")
+        }
+        self.amount_less_than_zero = {
+            "base_currency": "usd",
+            "converted_currency": "eur",
+            "amount": -100,
+            "date": datetime.datetime.now().strftime("%Y-%m-%d")
+        }
     def test_valid_conversion(self):
         response = self.client.post(self.url, data=self.valid_data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -62,6 +73,18 @@ class CurrencyConversionTestCase(APITestCase):
         response = self.client.post(self.url,data=self.missing_base_currency,format="json")
         self.assertEqual(response.status_code,status.HTTP_400_BAD_REQUEST)
         self.assertIn("base_currency",response.data)
+
+    def test_missing_amount(self):
+        response = self.client.post(self.url,data=self.missing_amount,format="json")
+        self.assertEqual(response.status_code,status.HTTP_200_OK)
+        self.assertIn("calculated_amount", response.data)
+        self.assertIn("exchange_rate", response.data)
+        self.assertEqual(response.data["original_amount"], "1.00")
+
+    def test_amount_less_than_zero(self):
+        response = self.client.post(self.url,data=self.amount_less_than_zero,format="json")
+        self.assertEqual(response.status_code,status.HTTP_400_BAD_REQUEST)
+    
 
     def test_currency_list(self):
         response = self.client.get(self.currency_list_url)
