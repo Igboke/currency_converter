@@ -1,6 +1,34 @@
 from rest_framework import serializers
 import datetime
 
+class CurrencyExchangeRateInputSerializer(serializers.Serializer):
+    """
+    Serializer for Currency Exchange Rate.
+    Current or Historical.
+    """
+    base_currency = serializers.CharField(max_length=6, required=True)
+    converted_currency = serializers.CharField(max_length=6, required=True)
+    date = serializers.DateField(required=False, help_text="Date in YYYY-MM-DD format.",allow_null=True)
+
+    def validate(self, data):
+        validated_data = super().validate(data)
+        if "date" not in validated_data or validated_data["date"] is None:
+             # If date is missing or None, set it to today's date
+             validated_data["date"] = datetime.datetime.now().strftime("%Y-%m-%d")
+        if data["base_currency"] == data["converted_currency"]:
+            raise serializers.ValidationError("Base and converted currencies cannot be the same.")
+        return data
+
+class CurrencyExchangeRateOutputSerializer(serializers.Serializer):
+    """
+    Serializer to represent the exchange rate data.
+    Current or Historical.
+    """
+    base_currency = serializers.CharField(max_length=6, required=True)
+    converted_currency = serializers.CharField(max_length=6, required=True)
+    exchange_rate = serializers.DecimalField(max_digits=20, decimal_places=10, read_only=True)
+    date = serializers.DateField(read_only=True)
+
 class CurrencyItemSerializer(serializers.Serializer):
     """
     Serializer to represent a single currency item in the output list.

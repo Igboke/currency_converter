@@ -18,7 +18,7 @@ Implementation of [Fawaz Ahmed API](https://github.com/fawazahmed0/exchange-api)
 **Description:** Converts a specified amount from one currency to another using the latest exchange rate.
 
 **Request Body:**
-Content Types: `application/json`, `application/x-www-form-urlencoded`, `multipart/form-data`
+Content Types: `application/json`, `application/x-www-form-urlencoded`
 
 | Field              | Type   | Description                         | Required |
 |-------------------|--------|-------------------------------------|----------|
