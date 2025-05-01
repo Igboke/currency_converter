@@ -10,6 +10,22 @@ class CurrencyExchangeRateInputSerializer(serializers.Serializer):
     converted_currency = serializers.CharField(max_length=6, required=True)
     date = serializers.DateField(required=False, help_text="Date in YYYY-MM-DD format.",allow_null=True)
 
+    def validate_base_currency(self, value):
+        """
+        convert to lowercase.
+        """
+        if value:
+            return value.lower()
+        return value
+    
+    def validate_converted_currency(self, value):
+        """
+        convert to lowercase.
+        """
+        if value:
+            return value.lower()
+        return value
+
     def validate(self, data):
         validated_data = super().validate(data)
         if "date" not in validated_data or validated_data["date"] is None:
@@ -44,6 +60,22 @@ class CurrencyConversionSerializer(serializers.Serializer):
     converted_currency = serializers.CharField(max_length=6,required=True)
     amount = serializers.DecimalField(max_digits=10, decimal_places=2,required=True)
     date = serializers.DateField(required=False, help_text="Date in YYYY-MM-DD format.",allow_null=True)
+
+    def validate_base_currency(self, value):
+        """
+        convert to lowercase.
+        """
+        if value:
+            return value.lower()
+        return value
+    
+    def validate_converted_currency(self, value):
+        """
+        convert to lowercase.
+        """
+        if value:
+            return value.lower()
+        return value
 
     def validate(self, data):
         validated_data = super().validate(data)
