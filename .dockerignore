@@ -1,0 +1,22 @@
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+db.sqlite3
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Virtual environment
+venv/
